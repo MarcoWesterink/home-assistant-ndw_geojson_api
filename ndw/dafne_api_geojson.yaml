@@ -1,0 +1,330 @@
+openapi: 3.0.3
+info:
+  title: OpenAPI specification for the GeoJson features API.
+  version: 0.0.2
+
+servers:
+  - url: https://dotnl.ndw.nu/api/rest/geojson/dynamic-road-status/charge-point-data/v1/
+
+paths:
+  /features:
+    get:
+      summary: Fetches features within a bounding box
+      description:
+        Fetches features for a given bounding box.
+      parameters:
+        - $ref: '#/components/parameters/BoundingBox'
+        - $ref: '#/components/parameters/Cursor'
+      responses:
+        "200":
+          description: GeoJSON FeatureCollection page
+          headers:
+            X-Page-Count:
+              description: Number of features in this page.
+              schema:
+                type: integer
+            X-Total-Count:
+              description: >
+                Total number of features in the result set for the bounding box provided.
+              schema:
+                type: integer
+            Cache-Control:
+              description: Cache hint.
+              schema:
+                type: string
+            Pragma:
+              description: Cache hint.
+              schema:
+                type: string
+            Expired:
+              description: Cache hint.
+              schema:
+                type: string
+            Link:
+              description: Url for the next result page.
+              schema:
+                type: string
+          content:
+            application/geo+json:
+              schema:
+                $ref: "#/components/schemas/FeatureCollection"
+        "400":
+          description: Bad request (invalid bbox, limit, or malformed cursor)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                invalidBbox:
+                  value:
+                    code: "INVALID_ARGUMENT"
+                    message: "bbox must be 'minLon,minLat,maxLon,maxLat' in EPSG:4326."
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+
+components:
+  parameters:
+    BoundingBox:
+      name: bbox
+      in: query
+      required: true
+      description: >
+        Bounding box in EPSG:4326 as "minLon,minLat,maxLon,maxLat".
+        Example: "4.70,51.50,5.15,51.80".
+      x-field-extra-annotation: "@nu.ndw.realtime.dafne.geojsonapi.validation.ValidBoundingBox"
+      schema:
+        type: string
+        pattern: "^-?\\d+(?:\\.\\d+)?,-?\\d+(?:\\.\\d+)?,-?\\d+(?:\\.\\d+)?,-?\\d+(?:\\.\\d+)?$"
+      example: "4.70,51.50,5.15,51.80"
+    Cursor:
+      name: cursor
+      in: query
+      required: false
+      description: >
+        Opaque, base64-encoded forward-only pagination token returned by the API.
+        Do not construct or modify; pass back exactly as received.
+      schema:
+        type: string
+      example: "eyJ0aWxlIjoiMTQyMzQyMzQiLCJsYXN0X2lkIjoiOTk4OCJ9"
+
+  schemas:
+    FeatureCollection:
+      title: FeatureCollection
+      description: JSON Schema for a GeoJSON FeatureCollection page of chargepoints.
+      type: object
+      additionalProperties: false
+      required:
+        - type
+        - features
+      properties:
+        type:
+          type: string
+          description: GeoJSON type.
+          enum:
+            - FeatureCollection
+        features:
+          type: array
+          description: List of chargepoint features.
+          items:
+            $ref: '#/components/schemas/Feature'
+          uniqueItems: true
+
+    Feature:
+      type: object
+      description: Chargepoint feature.
+      additionalProperties: false
+      required:
+        - geometry
+        - id
+        - properties
+        - type
+      properties:
+        type:
+          type: string
+          enum:
+            - Feature
+          description: GeoJSON type.
+          example: Feature
+        id:
+          type: string
+          description: Unique identifier of the chargepoint.
+          example: 127e6fbfe24a750e72930c220a8e138275656b8e5d8f48a98c3c92df2caba935
+        geometry:
+          $ref: '#/components/schemas/Geometry'
+        properties:
+          $ref: '#/components/schemas/Properties'
+
+    Geometry:
+      type: object
+      description: Geometry of the chargepoint.
+      additionalProperties: false
+      required:
+        - coordinates
+        - type
+      properties:
+        type:
+          type: string
+          enum:
+            - Point
+          description: Geometry type.
+        coordinates:
+          type: array
+          description: Point coordinates in EPSG:4326 `[longitude, latitude]`.
+          items:
+            type: number
+          uniqueItems: true
+          minItems: 2
+          maxItems: 2
+          example: [4.88969, 52.374]
+
+    Properties:
+      type: object
+      description: Additional properties of the chargepoint.
+      additionalProperties: false
+      required:
+        - address
+        - last_updated
+        - open
+        - cpo_id
+      properties:
+        address:
+          type: string
+          description: Address of the chargepoint.
+          example: Test street 1 1234AA Test City
+        availabilities:
+          type: array
+          nullable: true
+          description: List of connector availabilities.
+          items:
+            $ref: '#/components/schemas/Availability'
+          uniqueItems: true
+        last_updated:
+          type: string
+          format: date-time
+          description: Date-time of the last update for this chargepoint.
+          example: "2025-11-18T07:22:03Z"
+        open:
+          type: boolean
+          description: Calculated value indicating if a chargepoint is open.
+          example: true
+        operator_name:
+          type: string
+          nullable: true
+          description: Operator of the chargepoint.
+          example: Test operator
+        owner_name:
+          type: string
+          nullable: true
+          description: Owner of the chargepoint.
+          example: Test owner
+        cpo_id:
+          type: string
+          description: CPO id of the chargepoint.
+          example: ABC
+        country:
+          type: string
+          nullable: true
+          description: >
+            ISO-3166 alpha-3 country code of the CPO that 'owns' this chargepoint.
+          example: NLD
+        suboperator_name:
+          type: string
+          nullable: true
+          description: Suboperator of the chargepoint.
+          example: Test suboperator
+
+    Availability:
+      type: object
+      description: Availability of a connector.
+      additionalProperties: false
+      required:
+        - available
+        - connector_format
+        - connector_type
+        - power_max
+        - power_type
+        - total
+      properties:
+        available:
+          type: integer
+          description: Number of available connections with this combination of properties.
+          minimum: 0
+          multipleOf: 1
+        connector_format:
+          type: string
+          description: Format of the connector for this availability.
+          enum:
+            - CABLE
+            - SOCKET
+        connector_type:
+          type: string
+          description: Type of connector for this availability.
+          enum:
+            - CHADEMO
+            - CHAOJI
+            - DOMESTIC_A
+            - DOMESTIC_B
+            - DOMESTIC_C
+            - DOMESTIC_D
+            - DOMESTIC_E
+            - DOMESTIC_F
+            - DOMESTIC_G
+            - DOMESTIC_H
+            - DOMESTIC_I
+            - DOMESTIC_J
+            - DOMESTIC_K
+            - DOMESTIC_L
+            - DOMESTIC_M
+            - DOMESTIC_N
+            - DOMESTIC_O
+            - GBT_AC
+            - GBT_DC
+            - IEC_60309_2_SINGLE_16
+            - IEC_60309_2_THREE_16
+            - IEC_60309_2_THREE_32
+            - IEC_60309_2_THREE_64
+            - IEC_62196_T1
+            - IEC_62196_T1_COMBO
+            - IEC_62196_T2
+            - IEC_62196_T2_COMBO
+            - IEC_62196_T3A
+            - IEC_62196_T3C
+            - NEMA_5_20
+            - NEMA_6_30
+            - NEMA_6_50
+            - NEMA_10_30
+            - NEMA_10_50
+            - NEMA_14_30
+            - NEMA_14_50
+            - PANTOGRAPH_BOTTOM_UP
+            - PANTOGRAPH_TOP_DOWN
+            - TESLA_R
+            - TESLA_S
+        power_max:
+          type: number
+          description: Maximum power in kW for this availability.
+          minimum: 0.0
+        power_type:
+          type: string
+          description: Type of power for this availability.
+          enum:
+            - AC1
+            - AC2
+            - AC2_SPLIT
+            - AC3
+            - DC
+        tariff_ids:
+          type: array
+          description: List of tariffs for this combination of properties.
+          items:
+            type: string
+          nullable: true
+        total:
+          type: integer
+          description: Total number of connections with this combination of properties.
+          minimum: 0
+          multipleOf: 1
+    Error:
+      type: object
+      required: [code, message]
+      properties:
+        code:
+          type: string
+          example: INVALID_ARGUMENT
+        message:
+          type: string
+          example: bbox must be 'minLon,minLat,maxLon,maxLat' in EPSG:4326.
+        details:
+          type: object
+          additionalProperties: true
