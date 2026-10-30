@@ -1,0 +1,31 @@
+{
+  "title": "NDW Laadstations",
+  "config": {
+    "step": {
+      "user": {
+        "title": "NDW Laadstations",
+        "description": "Voer een begrenzingsvak in EPSG:4326 in: minLon,minLat,maxLon,maxLat. Bijvoorbeeld: 5.63,52.03,5.65,52.05. Stel het verversingsinterval in hele seconden in (minimaal 60, standaard 300).",
+        "data": {"bbox": "Begrenzingsvak", "poll_interval": "Verversingsinterval (seconden)"}
+      }
+    },
+    "error": {
+      "invalid_bbox": "Voer vier decimale coordinaten in: minLon,minLat,maxLon,maxLat. Lengtegraad: -180 tot 180, breedtegraad: -90 tot 90. Minima moeten kleiner zijn dan maxima.",
+      "cannot_connect": "Laadstations ophalen mislukt. Controleer de NDW-dienst en uw verbinding en probeer het opnieuw."
+    },
+    "abort": {"already_configured": "Dit begrenzingsvak is al ingesteld."}
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Gebied voor laadstations",
+        "description": "Wijzig het begrenzingsvak (minLon,minLat,maxLon,maxLat) of het verversingsinterval in hele seconden (minimaal 60). Eerder gevonden stations buiten het nieuwe gebied worden niet beschikbaar. U kunt hun apparaten handmatig verwijderen.",
+        "data": {"bbox": "Begrenzingsvak", "poll_interval": "Verversingsinterval (seconden)"}
+      }
+    },
+    "error": {
+      "invalid_bbox": "Voer vier geordende decimale coordinaten in EPSG:4326 in: minLon,minLat,maxLon,maxLat.",
+      "cannot_connect": "Laadstations ophalen mislukt. Controleer de NDW-dienst en uw verbinding en probeer het opnieuw.",
+      "already_configured": "Dit begrenzingsvak is al ingesteld."
+    }
+  }
+}

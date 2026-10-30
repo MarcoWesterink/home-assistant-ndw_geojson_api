@@ -1,0 +1,83 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "NL-NUO-2a61a9eb705854adffcc8588794c1eda",
+      "geometry": { "type": "Point", "coordinates": [5.636338, 52.04068] },
+      "properties": {
+        "address": "Markiezenhof 65",
+        "last_updated": "2026-10-27T17:55:32Z",
+        "open": false,
+        "cpo_id": "NUO",
+        "availabilities": [
+          {
+            "available": 2,
+            "connector_format": "SOCKET",
+            "connector_type": "IEC_62196_T2",
+            "power_max": 11040.0,
+            "power_type": "AC3",
+            "total": 2,
+            "tariff_ids": ["2000319612-2000011292"]
+          }
+        ],
+        "country": "NLD",
+        "operator_name": "Vattenfall InCharge",
+        "owner_name": null,
+        "suboperator_name": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "NL-NUO-894dcf14b6f193b314fca0de67513f9a",
+      "geometry": { "type": "Point", "coordinates": [5.637242, 52.04274] },
+      "properties": {
+        "address": "Gravenhof 1",
+        "last_updated": "2026-10-29T11:46:25Z",
+        "open": false,
+        "cpo_id": "NUO",
+        "availabilities": [
+          {
+            "available": 2,
+            "connector_format": "SOCKET",
+            "connector_type": "IEC_62196_T2",
+            "power_max": 11040.0,
+            "power_type": "AC3",
+            "total": 2,
+            "tariff_ids": ["2000319612-2000011292"]
+          }
+        ],
+        "country": "NLD",
+        "operator_name": "Vattenfall InCharge",
+        "owner_name": null,
+        "suboperator_name": null
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "NL-NUO-f28ebbb5-74cd-46d8-9a8f-4e60c7896b4f",
+      "geometry": { "type": "Point", "coordinates": [5.637627, 52.041447] },
+      "properties": {
+        "address": "Catharinadaal 86",
+        "last_updated": "2026-10-29T13:10:39Z",
+        "open": false,
+        "cpo_id": "NUO",
+        "availabilities": [
+          {
+            "available": 1,
+            "connector_format": "SOCKET",
+            "connector_type": "IEC_62196_T2",
+            "power_max": 11040.0,
+            "power_type": "AC3",
+            "total": 2,
+            "tariff_ids": ["2000319612-2000011292"]
+          }
+        ],
+        "country": "NLD",
+        "operator_name": "Vattenfall InCharge",
+        "owner_name": null,
+        "suboperator_name": null
+      }
+    }
+  ]
+}

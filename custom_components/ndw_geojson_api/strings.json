@@ -1,0 +1,31 @@
+{
+  "title": "NDW Charging Stations",
+  "config": {
+    "step": {
+      "user": {
+        "title": "NDW Charging Stations",
+        "description": "Enter a bounding box in EPSG:4326: minLon,minLat,maxLon,maxLat. For example: 5.63,52.03,5.65,52.05. Set the polling interval in whole seconds (minimum 60, default 300).",
+        "data": {"bbox": "Bounding box", "poll_interval": "Polling interval (seconds)"}
+      }
+    },
+    "error": {
+      "invalid_bbox": "Enter four decimal coordinates: minLon,minLat,maxLon,maxLat. Longitude must be between -180 and 180, latitude between -90 and 90, and minimums must be less than maximums.",
+      "cannot_connect": "Could not retrieve charging stations. Check the NDW service and your connection, then try again."
+    },
+    "abort": {"already_configured": "This bounding box is already configured."}
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Charging station area",
+        "description": "Change the bounding box (minLon,minLat,maxLon,maxLat) or polling interval in whole seconds (minimum 60). Previously discovered stations outside the new area become unavailable; you can remove their devices manually.",
+        "data": {"bbox": "Bounding box", "poll_interval": "Polling interval (seconds)"}
+      }
+    },
+    "error": {
+      "invalid_bbox": "Enter four ordered decimal coordinates in EPSG:4326: minLon,minLat,maxLon,maxLat.",
+      "cannot_connect": "Could not retrieve charging stations. Check the NDW service and your connection, then try again.",
+      "already_configured": "This bounding box is already configured."
+    }
+  }
+}
