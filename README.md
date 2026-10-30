@@ -13,6 +13,7 @@ No API key or YAML configuration is required.
 3. Go to **Settings > Devices & services > Add integration**, then search for
    **NDW Charging Stations**.
 4. Enter a bounding box, for example `5.63,52.03,5.65,52.05` for the supplied sample area.
+5. Set the polling interval in whole seconds (minimum **60**, default **300**).
 
 The format is **minLon,minLat,maxLon,maxLat**, in EPSG:4326 decimal degrees,
 as specified in [`ndw/dafne_api_geojson.yaml`](ndw/dafne_api_geojson.yaml).
@@ -51,7 +52,9 @@ does not convert it or create a power sensor until the units can be confirmed.
 
 ## Updates and configuration
 
-- One shared poll per configured area every **five minutes**, including all pages.
+- One shared poll per configured area at the configured interval, including all
+  pages. The default is **300 seconds** (five minutes), with a minimum of **60 seconds**.
+  Existing configurations keep the 300-second default until changed.
 - NDW's `Link: ...; rel="next"` pagination passes the opaque cursor unchanged.
 - New stations in the area are discovered automatically.
 - Stations absent from a successful snapshot become **unavailable**. Their devices
@@ -59,7 +62,8 @@ does not convert it or create a power sensor until the units can be confirmed.
 - Request failures or malformed responses make sensors unavailable and are reported
   through Home Assistant's coordinator logging. Partial snapshots are not published.
 - A valid area containing no stations can still be configured.
-- Use the integration's **Configure** option to change the bounding box. This
+- Use the integration's **Configure** option to change the bounding box or polling
+  interval in seconds. Saving either setting
   reloads the integration. Old devices outside the area remain in the registry;
   remove them manually if no longer needed.
 - Multiple different areas are supported. Overlapping areas create separate

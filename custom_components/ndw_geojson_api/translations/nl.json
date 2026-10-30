@@ -4,8 +4,8 @@
     "step": {
       "user": {
         "title": "NDW Laadstations",
-        "description": "Voer een begrenzingsvak in EPSG:4326 in: minLon,minLat,maxLon,maxLat. Bijvoorbeeld: 5.63,52.03,5.65,52.05. Laadstations worden elke vijf minuten bijgewerkt.",
-        "data": {"bbox": "Begrenzingsvak"}
+        "description": "Voer een begrenzingsvak in EPSG:4326 in: minLon,minLat,maxLon,maxLat. Bijvoorbeeld: 5.63,52.03,5.65,52.05. Stel het verversingsinterval in hele seconden in (minimaal 60, standaard 300).",
+        "data": {"bbox": "Begrenzingsvak", "poll_interval": "Verversingsinterval (seconden)"}
       }
     },
     "error": {
@@ -18,8 +18,8 @@
     "step": {
       "init": {
         "title": "Gebied voor laadstations",
-        "description": "Wijzig het begrenzingsvak (minLon,minLat,maxLon,maxLat). Eerder gevonden stations buiten het nieuwe gebied worden niet beschikbaar. U kunt hun apparaten handmatig verwijderen.",
-        "data": {"bbox": "Begrenzingsvak"}
+        "description": "Wijzig het begrenzingsvak (minLon,minLat,maxLon,maxLat) of het verversingsinterval in hele seconden (minimaal 60). Eerder gevonden stations buiten het nieuwe gebied worden niet beschikbaar. U kunt hun apparaten handmatig verwijderen.",
+        "data": {"bbox": "Begrenzingsvak", "poll_interval": "Verversingsinterval (seconden)"}
       }
     },
     "error": {
