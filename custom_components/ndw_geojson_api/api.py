@@ -74,10 +74,10 @@ def parse_station(feature: Any) -> Station:
         )
         if updated.tzinfo is None:
             raise ValueError("Timestamp must include a timezone")
-        if not isinstance(properties["open"], bool) or not isinstance(
-            properties["cpo_id"], str
-        ):
-            raise ValueError("Invalid open or cpo_id")
+        if "open" in properties and not isinstance(properties["open"], bool):
+            raise ValueError("Invalid open")
+        if not isinstance(properties["cpo_id"], str):
+            raise ValueError("Invalid cpo_id")
         coordinates = geometry["coordinates"]
         if (
             geometry["type"] != "Point"
