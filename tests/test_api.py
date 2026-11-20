@@ -80,6 +80,28 @@ def test_sample_stations():
     assert stations[0].available == 2
 
 
+def test_snapshot_without_open():
+    payload = deepcopy(SAMPLE)
+    for feature in payload["features"]:
+        del feature["properties"]["open"]
+    session = MagicMock()
+    session.get.return_value = response(payload)
+
+    stations = asyncio.run(api.NDWClient(session, BBOX).async_get_stations())
+
+    assert len(stations) == 3
+    for feature in payload["features"]:
+        station = stations[feature["id"]]
+        assert station.address == feature["properties"]["address"]
+        assert station.last_updated.isoformat() == (
+            feature["properties"]["last_updated"].replace("Z", "+00:00")
+        )
+        assert station.total == 2
+        expected_available = feature["properties"]["availabilities"][0]["available"]
+        assert station.available == expected_available
+        assert "open" not in station.properties
+
+
 def test_aggregate_connector_groups():
     feature = deepcopy(SAMPLE["features"][0])
     feature["properties"]["availabilities"].append({"total": 3, "available": 1})

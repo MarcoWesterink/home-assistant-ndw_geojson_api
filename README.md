@@ -44,7 +44,10 @@ The details are attached only to this sensor to avoid four copies in history.
 
 `availabilities: null` or an absent availability list produces **unknown** counts,
 not zero. An empty list produces zero counts. The `open` field is preserved as
-reported and does not override the availability counts.
+reported when present and does not override the availability counts. The live
+API no longer included `open` when checked on 2026-11-20, despite it being required
+by the supplied Swagger specification. Its absence is supported; no replacement
+value is inferred.
 
 **Power units:** the Swagger document describes `power_max` as kW, but the sample
 contains values such as `11040.0`. This integration preserves the raw field and
